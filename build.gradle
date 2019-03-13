@@ -1,13 +1,32 @@
+buildscript {
+    dependencies {
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.1.2.RELEASE'
     id 'java'
 }
 
-apply plugin: 'io.spring.dependency-management'
-
 group = 'org.codeatlanta.natureevents'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.palantir.docker'
+
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
+}
 
 repositories {
     mavenCentral()

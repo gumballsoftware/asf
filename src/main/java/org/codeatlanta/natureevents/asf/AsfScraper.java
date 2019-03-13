@@ -14,34 +14,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class AsfScraper {
 
     private static final String ASF_URL = "https://atlantasciencefestival.org/events-2019/";
     private static final int JSOUP_TIMEOUT = 8000;
+
     public static void main(String[] args) {
         //Verify the output file doesn't exist before wasting resources getting the data
         final String fileName = "asf.csv";
         final Path path = Paths.get(fileName);
-        try{
-            if (Files.exists(path)){
-                System.out.println("File already exists. Overwrite? (y/n)");
-                final Scanner input = new Scanner(System.in);
-                final String answer = input.next().toLowerCase();
-                if (!answer.equals("y")){
-                    System.out.println("I didn't get a 'y', so I'll let you sort this out before proceeding.");
-                    return;
-                }
-                //Don't delete the file just yet, in case something breaks while getting the data
-                //Files.delete(path);
-            }
-        } catch(Exception e){
-            System.out.println("Exception");
-            e.printStackTrace();
-            return;
-        }
-
         //Get the data
         Elements content;
         List<AsfScraperRow> eventList = new ArrayList<>();
@@ -140,7 +122,7 @@ public class AsfScraper {
     }
 
 
-    private static class AsfScraperRow implements IScraperRow{
+    private static class AsfScraperRow {
         public final String organizer = "Atlanta Science Festival";
         public String title;
         public String description;
@@ -150,6 +132,7 @@ public class AsfScraper {
         public LocalDate endDate;
         public LocalTime startTime;
         public LocalTime endTime;
+        public String cost = "";
         //public String rsvpInfo; // n/a
         public AsfScraperRow(){}
     }
