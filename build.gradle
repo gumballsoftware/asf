@@ -1,0 +1,26 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.2.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'org.codeatlanta.natureevents'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+   datadict
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'joda-time:joda-time:2.10.1'
+    implementation 'org.jsoup:jsoup:1.11.3'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    datadict 'junit:junit:4.12'
+}
